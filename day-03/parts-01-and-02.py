@@ -39,7 +39,6 @@ def traverse_slope(slope, delta_x, delta_y):
 
 class Route:
     def __init__(self, gradient_x, gradient_y):
-        super().__init__()
         self.gradient_x = gradient_x
         self.gradient_y = gradient_y
 
