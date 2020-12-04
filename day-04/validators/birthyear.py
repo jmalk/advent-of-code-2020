@@ -1,6 +1,14 @@
 import re
-from isfourdigits import is_four_digits
-from isininclusiverange import is_in_inclusive_range
+
+
+# Could use number in range(x, y)
+# but don't like the (inclusive, exclusive) thing for this use case.
+def is_in_inclusive_range(number, minimum, maximum):
+    return minimum <= number <= maximum
+
+
+def is_four_digits(string):
+    return re.match(r'\d{4}$', string) != None
 
 
 def is_valid_birth_year(birth_year):
