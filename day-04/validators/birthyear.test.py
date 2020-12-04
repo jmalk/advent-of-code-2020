@@ -1,9 +1,8 @@
 import unittest
-
 from birthyear import is_valid_birth_year
 
 
-class TestSum(unittest.TestCase):
+class TestIsValidBirthYear(unittest.TestCase):
     def test_five_digits_invalid(self):
         self.assertEqual(is_valid_birth_year("12345"), False,
                          "Should be False")
