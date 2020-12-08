@@ -1,4 +1,8 @@
 with open('sample-input.txt') as f:
+    sample_lines = f.readlines()
+f.close()
+
+with open('input.txt') as f:
     lines = f.readlines()
 f.close()
 
@@ -12,6 +16,7 @@ assert to_instruction('nop +0') == ('nop', +0)
 assert to_instruction('acc -2') == ('acc', -2)
 assert to_instruction('jmp +5') == ('jmp', +5)
 
+sample_instructions = [to_instruction(line) for line in sample_lines]
 instructions = [to_instruction(line) for line in lines]
 
 
@@ -72,3 +77,25 @@ assert process_instruction(('jmp', +2), {
     "acc": 0,
     "pointer": 8
 }
+
+
+def accumulator_before_repeat(program):
+    lines_run = []
+    would_repeat = False
+    state = {'acc': 0, 'pointer': 0}
+
+    while would_repeat == False:
+        if state['pointer'] not in lines_run:
+            lines_run.append(state['pointer'])
+            state = process_instruction(program[state['pointer']], state)
+        else:
+            would_repeat = True
+
+    return state['acc']
+
+
+assert accumulator_before_repeat(sample_instructions) == 5
+
+part_1 = accumulator_before_repeat(instructions)
+print('Part 1:', part_1)
+assert part_1 == 1451
