@@ -22,22 +22,28 @@ instructions = [to_instruction(string) for string in lines]
 initial_state = {'position_north': 0, 'position_east': 0, 'heading': 'E'}
 
 
-def turn_right(initial_heading, degrees):
-    headings = ['N', 'E', 'S', 'W']
+def turn(direction, initial_heading, degrees):
+    headings = []
+    if direction == 'right':
+        headings = ['N', 'E', 'S', 'W']
+    elif direction == 'left':
+        headings = ['N', 'W', 'S', 'E']
+    else:
+        raise Exception('turn can only take directions "left" or "right".')
+
     quarter_turns = int(degrees / 90)
     start_index = headings.index(initial_heading)
     new_index = (start_index + quarter_turns) % 4
     new_heading = headings[new_index]
     return new_heading
+
+
+def turn_right(initial_heading, degrees):
+    return turn('right', initial_heading, degrees)
 
 
 def turn_left(initial_heading, degrees):
-    headings = ['N', 'W', 'S', 'E']
-    quarter_turns = int(degrees / 90)
-    start_index = headings.index(initial_heading)
-    new_index = (start_index + quarter_turns) % 4
-    new_heading = headings[new_index]
-    return new_heading
+    return turn('left', initial_heading, degrees)
 
 
 # Turn right tests
