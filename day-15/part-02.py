@@ -7,7 +7,7 @@ test_cases = [([0, 3, 6], 2020, 436), ([1, 3, 2], 2020, 1),
 game_state
 n_turns: int
 latest_turn: int
-history: <given_number: int, n_turns: int>
+history: <given_number: int, last_appeared_at: int>
 '''
 
 
@@ -20,15 +20,11 @@ def turn(game_state):
         print(n_turns)
 
     if latest_turn in history:
-        game_state['latest_turn'] = history[latest_turn]
-        for key in game_state['history']:
-            game_state['history'][key] += 1
-        game_state['history'][latest_turn] = 1
+        game_state['latest_turn'] = n_turns - history[latest_turn]
+        game_state['history'][latest_turn] = n_turns
     else:
         game_state['latest_turn'] = 0
-        for key in game_state['history']:
-            game_state['history'][key] += 1
-        game_state['history'][latest_turn] = 1
+        game_state['history'][latest_turn] = n_turns
 
     game_state['n_turns'] += 1
 
@@ -41,11 +37,11 @@ def generate_initial_state(starting_turns):
     game_state = {
         'n_turns': n_starting_turns,
         'latest_turn': starting_turns[-1],
-        'history': {}
+        'history': {}  # { Number: Turn it was last seen on }
     }
 
     for i in range(n_starting_turns - 1):
-        game_state['history'][starting_turns[i]] = (n_starting_turns - 1) - i
+        game_state['history'][starting_turns[i]] = i + 1
 
     return game_state
 
@@ -54,10 +50,32 @@ assert generate_initial_state([0, 3, 6]) == {
     'n_turns': 3,
     'latest_turn': 6,
     'history': {
-        0: 2,
-        3: 1,
+        0: 1,
+        3: 2,
     }
 }
+
+after_fourth_turn = {
+    'n_turns': 4,
+    'latest_turn': 0,
+    'history': {
+        0: 1,
+        3: 2,
+        6: 3
+    }
+}
+assert turn(generate_initial_state([0, 3, 6])) == after_fourth_turn
+
+after_fifth_turn = {
+    'n_turns': 5,
+    'latest_turn': 3,
+    'history': {
+        3: 2,
+        6: 3,
+        0: 4
+    }
+}
+assert turn(after_fourth_turn) == after_fifth_turn
 
 
 def play_until(opening_turns, n_turns):
@@ -77,3 +95,4 @@ assert part_1 == 1294
 
 part_2 = play_until([1, 0, 16, 5, 17, 4], 30000000)
 print('Part 2:', part_2)
+assert part_2 == 573522
