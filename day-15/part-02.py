@@ -17,7 +17,7 @@ def turn(game_state):
     n_turns = game_state['n_turns']
 
     if n_turns % 1000 == 0:
-        print(n_turns)
+        print('Reached turn', n_turns)
 
     if latest_turn in history:
         game_state['latest_turn'] = n_turns - history[latest_turn]
